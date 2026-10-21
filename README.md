@@ -46,6 +46,15 @@
 npx serve .
 ```
 
+## كود QR
+
+بمجلد `print`:
+
+- **`qr-card.png`**: كارت جاهز للطباعة (للمراية أو باب المحل) فيه اسم المحل والكود.
+- **`qr-code.png`** و **`qr-code.svg`**: الكود وحده، تگدر تحطه على الكارتات أو بالانستغرام.
+
+الكود يودي لـ `https://alrubayea1406.github.io/hair-cur-/`، ويشتغل بعد ما تفعّل GitHub Pages مثل ما مشروح تحت.
+
 ## النشر على GitHub Pages
 
 1. بالمستودع على GitHub روح لـ **Settings ← Pages**.
