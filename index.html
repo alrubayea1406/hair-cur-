@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>حلاقة الأمير</title>
+  <meta name="description" content="حلاقة الأمير: احجز دورك أونلاين، اختار القصة والساعة، وشوف صور من شغلنا.">
+  <meta name="theme-color" content="#d7eadf">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Readex+Pro:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="crown" viewBox="0 0 64 46">
+      <path d="M8 14 L20 26 L32 6 L44 26 L56 14 L51 36 L13 36 Z" fill="#0f2a20" transform="translate(-2.5 2.5)"/>
+      <path d="M8 14 L20 26 L32 6 L44 26 L56 14 L51 36 L13 36 Z" fill="#c8161d"/>
+      <circle cx="8" cy="12" r="4.5" fill="#c8161d"/>
+      <circle cx="32" cy="5" r="4.5" fill="#c8161d"/>
+      <circle cx="56" cy="12" r="4.5" fill="#c8161d"/>
+    </symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2Z"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M4 20l1.3-3.9A8 8 0 1 1 8 19.2Z"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></symbol>
+  </svg>
+
+  <a class="skip" href="#main">انتقل للمحتوى</a>
+
+  <header class="topbar">
+    <div class="wrap topbar__inner">
+      <a class="brand" href="index.html">
+        <svg aria-hidden="true"><use href="#crown"/></svg>
+        حلاقة الأمير
+      </a>
+      <nav class="nav" aria-label="أقسام الصفحة">
+        <a href="#prices">الأسعار</a>
+        <a href="#work">شغلنا</a>
+        <a href="#visit">وين نكون</a>
+      </nav>
+      <a class="btn btn--red btn--small" href="booking.html">احجز دورك</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="wrap hero__inner">
+        <div>
+          <h1 class="sign">
+            <svg class="sign__crown" viewBox="0 0 64 46" aria-hidden="true"><use href="#crown"/></svg>
+            حلاقة الأمير
+          </h1>
+          <p class="hero__lede">اختار القصة والساعة من الموبايل، وتعال على وكتك بدون انتظار.</p>
+          <div class="hero__actions">
+            <a class="btn btn--red" href="booking.html">احجز دورك</a>
+            <a class="btn btn--ghost" href="#work">شوف شغلنا</a>
+          </div>
+          <p class="status" id="status" aria-live="polite"></p>
+        </div>
+        <div class="pole" aria-hidden="true">
+          <div class="pole__cap"></div>
+          <div class="pole__glass"></div>
+          <div class="pole__cap pole__cap--bottom"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="prices" aria-labelledby="prices-title">
+      <div class="wrap">
+        <div class="section__head">
+          <div>
+            <h2 class="section__title" id="prices-title">الأسعار</h2>
+            <p class="section__intro">اضغط على أي خدمة حتى تحجزها مباشرة.</p>
+          </div>
+        </div>
+        <div class="board">
+          <ul class="board__list" id="price-list"></ul>
+          <noscript><p>شغّل الجافاسكربت بالمتصفح حتى تطلع الأسعار.</p></noscript>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="work" aria-labelledby="work-title">
+      <div class="wrap">
+        <div class="section__head">
+          <div>
+            <h2 class="section__title" id="work-title">من شغلنا</h2>
+            <p class="section__intro">قصات سويناها بالمحل. اضغط على الصورة حتى تكبر.</p>
+          </div>
+          <div class="filters" id="filters" role="group" aria-label="فلترة حسب التسريحة"></div>
+        </div>
+        <ul class="gallery" id="gallery"></ul>
+      </div>
+    </section>
+
+    <section class="section visit" id="visit" aria-labelledby="visit-title">
+      <div class="wrap visit__grid">
+        <div>
+          <h2 class="section__title" id="visit-title">وين نكون</h2>
+          <p data-shop="address"></p>
+          <div class="contact">
+            <a class="btn btn--ghost btn--small" data-shop="tel" href="#">
+              <svg aria-hidden="true"><use href="#i-phone"/></svg><span data-shop="phone" dir="ltr"></span>
+            </a>
+            <a class="btn btn--ghost btn--small" data-shop="map" href="#" target="_blank" rel="noopener">
+              <svg aria-hidden="true"><use href="#i-pin"/></svg>افتح بالخريطة
+            </a>
+            <a class="btn btn--ghost btn--small" data-shop="whatsapp" href="#" target="_blank" rel="noopener">
+              <svg aria-hidden="true"><use href="#i-chat"/></svg>واتساب
+            </a>
+            <a class="btn btn--ghost btn--small" data-shop="instagram" href="#" target="_blank" rel="noopener">
+              <svg aria-hidden="true"><use href="#i-camera"/></svg>انستغرام
+            </a>
+          </div>
+        </div>
+        <div>
+          <h3>أوقات الدوام</h3>
+          <table class="hours">
+            <caption class="visually-hidden">أوقات الدوام خلال الأسبوع</caption>
+            <tbody id="hours"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <span>حلاقة الأمير © <span data-shop="year"></span></span>
+      <a href="booking.html">احجز دورك</a>
+    </div>
+  </footer>
+
+  <dialog class="lightbox" id="lightbox" aria-label="صورة من شغلنا">
+    <img id="lightbox-img" src="" alt="">
+    <div class="lightbox__bar">
+      <button class="icon-btn" type="button" id="lightbox-prev" aria-label="الصورة السابقة"><svg aria-hidden="true"><use href="#i-right"/></svg></button>
+      <p class="lightbox__caption" id="lightbox-caption"></p>
+      <button class="icon-btn" type="button" id="lightbox-next" aria-label="الصورة التالية"><svg aria-hidden="true"><use href="#i-left"/></svg></button>
+      <button class="icon-btn" type="button" id="lightbox-close" aria-label="سكّر"><svg aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+  </dialog>
+
+  <script src="js/config.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

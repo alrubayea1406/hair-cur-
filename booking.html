@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>احجز دورك | حلاقة الأمير</title>
+  <meta name="description" content="احجز دورك بحلاقة الأمير: اختار التسريحة واليوم والساعة، وأرسل الحجز بالواتساب.">
+  <meta name="theme-color" content="#d7eadf">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Readex+Pro:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="crown" viewBox="0 0 64 46">
+      <path d="M8 14 L20 26 L32 6 L44 26 L56 14 L51 36 L13 36 Z" fill="#0f2a20" transform="translate(-2.5 2.5)"/>
+      <path d="M8 14 L20 26 L32 6 L44 26 L56 14 L51 36 L13 36 Z" fill="#c8161d"/>
+      <circle cx="8" cy="12" r="4.5" fill="#c8161d"/>
+      <circle cx="32" cy="5" r="4.5" fill="#c8161d"/>
+      <circle cx="56" cy="12" r="4.5" fill="#c8161d"/>
+    </symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2Z"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M4 20l1.3-3.9A8 8 0 1 1 8 19.2Z"/></symbol>
+  </svg>
+
+  <a class="skip" href="#booking-form">انتقل للحجز</a>
+
+  <header class="topbar">
+    <div class="wrap topbar__inner">
+      <a class="brand" href="index.html">
+        <svg aria-hidden="true"><use href="#crown"/></svg>
+        حلاقة الأمير
+      </a>
+      <nav class="nav" aria-label="الموقع">
+        <a href="index.html#prices">الأسعار</a>
+        <a href="index.html#work">شغلنا</a>
+        <a href="index.html#visit">وين نكون</a>
+      </nav>
+      <a class="btn btn--ghost btn--small" data-shop="tel" href="#">
+        <svg aria-hidden="true"><use href="#i-phone"/></svg>اتصل
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="booking-head">
+      <div class="wrap">
+        <h1>احجز دورك</h1>
+        <p>اختار التسريحة واليوم والساعة. نفتحلك الواتساب ويا رسالة الحجز جاهزة، والأمير يرد عليك ويثبّت الدور.</p>
+      </div>
+    </section>
+
+    <form class="wrap booking" id="booking-form" novalidate>
+      <div>
+        <fieldset class="step" id="step-service">
+          <legend><span class="step__num">١</span>شنو تريد تسوي؟</legend>
+          <div class="options options--services" id="services"></div>
+        </fieldset>
+
+        <fieldset class="step" id="step-day">
+          <legend><span class="step__num">٢</span>يا يوم؟</legend>
+          <div class="options options--days" id="days"></div>
+        </fieldset>
+
+        <fieldset class="step" id="step-time">
+          <legend><span class="step__num">٣</span>يا ساعة؟</legend>
+          <p class="step__hint">اختار الساعة اللي تناسبك، والأمير يأكدها وياك بالواتساب.</p>
+          <div class="options options--times" id="times"></div>
+        </fieldset>
+
+        <fieldset class="step" id="step-info">
+          <legend><span class="step__num">٤</span>معلوماتك</legend>
+          <div class="field-row">
+            <div class="field">
+              <label for="name">الاسم</label>
+              <input id="name" name="name" autocomplete="name" required aria-describedby="name-error">
+              <p class="field__error" id="name-error" hidden></p>
+            </div>
+            <div class="field">
+              <label for="phone">رقم الموبايل</label>
+              <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="07XX XXX XXXX" required aria-describedby="phone-error">
+              <p class="field__error" id="phone-error" hidden></p>
+            </div>
+          </div>
+          <div class="field">
+            <label for="note">ملاحظة للحلاق <span class="field__opt">(اختياري)</span></label>
+            <textarea id="note" name="note" rows="3" placeholder="مثلاً: أريد الجوانب على رقم واحد"></textarea>
+          </div>
+        </fieldset>
+      </div>
+
+      <aside class="ticket-wrap" aria-label="ملخص الحجز">
+        <div class="ticket">
+          <p class="ticket__title">تذكرة الدور</p>
+          <p class="ticket__shop">حلاقة الأمير</p>
+          <dl class="ticket__rows">
+            <div class="ticket__row"><dt>الخدمة</dt><dd id="t-service"></dd></div>
+            <div class="ticket__row"><dt>اليوم</dt><dd id="t-day"></dd></div>
+            <div class="ticket__row"><dt>الساعة</dt><dd id="t-time"></dd></div>
+            <div class="ticket__row"><dt>المدة</dt><dd id="t-duration"></dd></div>
+            <div class="ticket__row ticket__total"><dt>المجموع</dt><dd id="t-price"></dd></div>
+          </dl>
+          <button class="btn btn--red" type="submit">
+            <svg aria-hidden="true"><use href="#i-chat"/></svg>أرسل الحجز بالواتساب
+          </button>
+          <div class="form-errors" id="form-errors" role="alert" hidden></div>
+          <p class="ticket__note">الدفع بالمحل. الدور يتثبّت من يرد عليك الأمير.</p>
+        </div>
+
+        <div class="sent" id="sent" tabindex="-1" hidden>
+          <h2>رسالة الحجز جاهزة بالواتساب</h2>
+          <p>اضغط إرسال بالواتساب حتى توصل، والأمير يرد عليك ويثبّت الدور.</p>
+          <a class="btn btn--ghost btn--small" id="sent-link" href="#" target="_blank" rel="noopener">ما انفتح الواتساب؟ افتحه من هنا</a>
+        </div>
+      </aside>
+    </form>
+
+    <section class="wrap mine" id="mine" aria-labelledby="mine-title" hidden>
+      <h2 id="mine-title">حجوزاتك</h2>
+      <ul class="mine__list" id="mine-list"></ul>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <span>حلاقة الأمير © <span data-shop="year"></span></span>
+      <span>للاستفسار: <a data-shop="tel" href="#"><span data-shop="phone" dir="ltr"></span></a></span>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/booking.js"></script>
+</body>
+</html>
