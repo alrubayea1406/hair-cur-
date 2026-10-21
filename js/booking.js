@@ -312,6 +312,14 @@
     const url = A.whatsappLink(buildMessage(booking));
     const win = window.open(url, "_blank");
     if (win) win.opener = null;
+    // إذا المتصفح منع فتح الواتساب، نخلي الزر هو الخطوة الرئيسية
+    const sentLink = document.getElementById("sent-link");
+    document.getElementById("sent-title").textContent = win ? "رسالة الحجز جاهزة بالواتساب" : "باقي خطوة وحدة";
+    document.getElementById("sent-text").textContent = win
+      ? "اضغط إرسال بالواتساب حتى توصل، والأمير يرد عليك ويثبّت الدور."
+      : "افتح الواتساب وأرسل الرسالة الجاهزة، والأمير يرد عليك ويثبّت الدور.";
+    sentLink.className = win ? "btn btn--ghost btn--small" : "btn btn--red";
+    sentLink.textContent = win ? "ما انفتح الواتساب؟ افتحه من هنا" : "افتح الواتساب وأرسل الحجز";
 
     const others = loadBookings().filter(
       (b) => !(b.date === booking.date && b.time === booking.time && b.service === booking.service)
