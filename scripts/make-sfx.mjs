@@ -130,7 +130,7 @@ const click = () => {
   );
 };
 
-// ---------------- music: cheerful plucked loop (Karplus-Strong) ----------------
+// ---------------- music 1: cheerful plucked loop (Karplus-Strong) ----------------
 const music = () => {
   const bpm = 104;
   const beat = 60 / bpm;
@@ -221,6 +221,134 @@ const music = () => {
   return [outL.map((v) => (v / m) * 0.85), outR.map((v) => (v / m) * 0.85)];
 };
 
+
+// bright metallic "ting" for coin flips
+const coin = () => {
+  const n = Math.floor(0.9 * SR);
+  return normalize(
+    Array.from({length: n}, (_, i) => {
+      const t = i / SR;
+      const t2 = t - 0.06;
+      const ting = (tt, f) =>
+        tt < 0 ? 0 : [[1, 1, 7], [2.32, 0.5, 11], [4.25, 0.3, 16], [6.8, 0.15, 24]].reduce(
+          (sum, [r, a, k]) => sum + a * Math.sin(2 * Math.PI * f * r * tt) * Math.exp(-k * tt), 0) * (1 - Math.exp(-tt * 4000));
+      return ting(t, 2093) + 0.8 * ting(t2, 2637);
+    }),
+    0.55,
+  );
+};
+
+// ---------------- music 2: mellow lo-fi loop (FM electric piano + soft drums) ----------------
+const lofi = () => {
+  const bpm = 84;
+  const beat = 60 / bpm;
+  const bars = 8;
+  const loopLen = Math.floor(bars * 4 * beat * SR);
+  const total = loopLen + 3 * SR;
+  const L = new Float32Array(total);
+  const R = new Float32Array(total);
+  const midi = (m) => 440 * 2 ** ((m - 69) / 12);
+  const add = (s0, i, v, pan = 0) => {
+    if (s0 + i < total && s0 + i >= 0) {
+      L[s0 + i] += v * (1 - pan);
+      R[s0 + i] += v * (1 + pan);
+    }
+  };
+  const epiano = (start, m, dur, amp, pan) => {
+    const f = midi(m);
+    const s0 = Math.floor(start * SR);
+    const len = Math.floor((dur + 0.8) * SR);
+    for (let i = 0; i < len; i++) {
+      const t = i / SR;
+      const idx = 0.3 + 2.2 * Math.exp(-t * 5);
+      const mod = Math.sin(2 * Math.PI * f * t) * idx;
+      const tine = Math.sin(2 * Math.PI * f * 14 * t) * 0.6 * Math.exp(-t * 30);
+      const env = (1 - Math.exp(-t * 300)) * (0.35 + 0.65 * Math.exp(-t * 2.2)) * (t > dur ? Math.exp(-(t - dur) * 6) : 1);
+      add(s0, i, Math.sin(2 * Math.PI * f * t + mod + tine) * env * amp, pan);
+    }
+  };
+  const bassNote = (start, m, dur) => {
+    const f = midi(m);
+    const s0 = Math.floor(start * SR);
+    for (let i = 0; i < dur * SR; i++) {
+      const t = i / SR;
+      const env = (1 - Math.exp(-t * 200)) * Math.exp(-t * 1.6) * (t > dur - 0.05 ? (dur - t) / 0.05 : 1);
+      add(s0, i, (Math.sin(2 * Math.PI * f * t) + 0.15 * Math.sin(4 * Math.PI * f * t)) * env * 0.42);
+    }
+  };
+  const kick = (start) => {
+    const s0 = Math.floor(start * SR);
+    let ph = 0;
+    for (let i = 0; i < 0.3 * SR; i++) {
+      const t = i / SR;
+      ph += (2 * Math.PI * (45 + 70 * Math.exp(-t * 28))) / SR;
+      add(s0, i, Math.sin(ph) * Math.exp(-t * 11) * 0.55);
+    }
+  };
+  const snare = (start) => {
+    const s0 = Math.floor(start * SR);
+    const bp = bandpass();
+    for (let i = 0; i < 0.22 * SR; i++) {
+      const t = i / SR;
+      add(s0, i, (bp(noise(), 1800, 0.7) * 0.9 + Math.sin(2 * Math.PI * 185 * t) * 0.35) * Math.exp(-t * 18) * 0.32);
+    }
+  };
+  const hat = (start, amp) => {
+    const s0 = Math.floor(start * SR);
+    const bp = bandpass();
+    for (let i = 0; i < 0.05 * SR; i++) {
+      const t = i / SR;
+      add(s0, i, bp(noise(), 8500, 0.9) * Math.exp(-t * 90) * amp, 0.2);
+    }
+  };
+  // Fmaj7  Em7  Dm7  Cmaj7  (x2)
+  const chords = [[53, 57, 60, 64], [52, 55, 59, 62], [50, 53, 57, 60], [48, 52, 55, 59]];
+  for (let bar = 0; bar < bars; bar++) {
+    const c = chords[bar % 4];
+    const b0 = bar * 4 * beat;
+    c.forEach((m, k) => epiano(b0 + k * 0.018, m + 12, 1.4 * beat, 0.16, k % 2 ? 0.25 : -0.25));
+    c.forEach((m, k) => epiano(b0 + 2.5 * beat + k * 0.015, m + 12, 1.2 * beat, 0.11, k % 2 ? -0.2 : 0.2));
+    bassNote(b0, c[0] - 12, 1.8 * beat);
+    bassNote(b0 + 2.5 * beat, c[0] - 12, 1.2 * beat);
+    kick(b0);
+    kick(b0 + 2.5 * beat);
+    snare(b0 + beat);
+    snare(b0 + 3 * beat);
+    for (let e = 0; e < 8; e++) hat(b0 + (e + (e % 2 ? 0.16 : 0)) * 0.5 * beat, e % 2 ? 0.12 : 0.2);
+  }
+  // vinyl crackle
+  for (let i = 0; i < total; i++) {
+    if (rnd() < 0.00025) {
+      const a = (rnd() * 0.5 + 0.2) * 0.25;
+      for (let k = 0; k < 30 && i + k < total; k++) {
+        L[i + k] += noise() * a * Math.exp(-k / 5);
+        R[i + k] += noise() * a * Math.exp(-k / 5);
+      }
+    }
+    const hiss = noise() * 0.004;
+    L[i] += hiss;
+    R[i] += hiss;
+  }
+  // warm low-pass
+  let yl = 0, yr = 0;
+  const k = 1 - Math.exp((-2 * Math.PI * 5200) / SR);
+  for (let i = 0; i < total; i++) {
+    yl += k * (L[i] - yl);
+    yr += k * (R[i] - yr);
+    L[i] = yl;
+    R[i] = yr;
+  }
+  for (let i = loopLen; i < total; i++) {
+    L[i - loopLen] += L[i];
+    R[i - loopLen] += R[i];
+  }
+  const outL = Array.from(L.subarray(0, loopLen));
+  const outR = Array.from(R.subarray(0, loopLen));
+  let m = 0;
+  for (let i = 0; i < loopLen; i++) m = Math.max(m, Math.abs(outL[i]), Math.abs(outR[i]));
+  return [outL.map((v) => (v / m) * 0.85), outR.map((v) => (v / m) * 0.85)];
+};
+
 mkdirSync('public/sfx', {recursive: true});
 mkdirSync('public/music', {recursive: true});
 writeWav('public/sfx/pop.wav', [pop()]);
@@ -228,5 +356,7 @@ writeWav('public/sfx/whoosh.wav', [whoosh()]);
 writeWav('public/sfx/ding.wav', [ding()]);
 writeWav('public/sfx/boing.wav', [boing()]);
 writeWav('public/sfx/click.wav', [click()]);
-writeWav('public/music/leesho-loop.wav', music());
+writeWav('public/music/pluck-loop.wav', music());
+writeWav('public/sfx/coin.wav', [coin()]);
+writeWav('public/music/lofi-loop.wav', lofi());
 console.log('sfx + music written to public/sfx and public/music');

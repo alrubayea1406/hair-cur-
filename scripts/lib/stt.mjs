@@ -19,9 +19,10 @@ export const transcribe = async (file, {languageCode = 'ar', model = 'scribe_v1'
   return JSON.parse(text);
 };
 
-// Normalise Arabic for comparison: strip diacritics/tatweel/punctuation, unify alef/ya/ta-marbuta.
+// Normalise text (Arabic or English) for comparison: strip diacritics/tatweel/punctuation, unify alef/ya/ta-marbuta.
 export const normAr = (s) =>
   s
+    .toLowerCase()
     .replace(/[ً-ْٰـ]/g, '')
     .replace(/[إأآٱ]/g, 'ا')
     .replace(/ى/g, 'ي')

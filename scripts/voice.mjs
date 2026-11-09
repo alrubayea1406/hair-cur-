@@ -10,7 +10,7 @@ import {ttsWithTimestamps} from './lib/elevenlabs.mjs';
 
 const FPS = 30;
 const LEAD_IN = 0.2; // seconds of silence before the first word
-const TAIL = 2.2; // seconds after the last word (end card)
+const TAIL = 2.5; // seconds after the last word (end card)
 
 const id = process.argv[2];
 const force = process.argv.includes('--force');
@@ -21,9 +21,9 @@ if (!id) {
 }
 
 const script = JSON.parse(readFileSync(`videos/${id}/script.json`, 'utf8'));
-const leeshoVoice = JSON.parse(readFileSync('voices/leesho.json', 'utf8'));
+const hostVoice = JSON.parse(readFileSync(`voices/${script.voice?.name || 'sterling'}.json`, 'utf8'));
 const voice = {
-  voiceId: script.voice?.voiceId || leeshoVoice.voice_id,
+  voiceId: script.voice?.voiceId || hostVoice.voice_id,
   model: script.voice?.model || 'eleven_v3',
   stability: script.voice?.stability ?? 0.5,
   similarity: script.voice?.similarity ?? 0.8,
@@ -42,29 +42,81 @@ const sceneRanges = script.scenes.map((s, i) => {
   return {start, end: fullText.length};
 });
 
-const hash = createHash('sha1').update(JSON.stringify({fullText, voice})).digest('hex').slice(0, 12);
-const cachePath = `${outDir}/tts-cache.json`;
-let tts;
-if (!force && existsSync(cachePath) && existsSync(`${outDir}/voice.mp3`)) {
-  const cache = JSON.parse(readFileSync(cachePath, 'utf8'));
-  if (cache.hash === hash) tts = cache;
-}
-if (!tts) {
-  console.log(`TTS: ${fullText.length} chars, model ${voice.model}...`);
-  const r = await ttsWithTimestamps({
-    voiceId: voice.voiceId,
-    text: fullText,
-    modelId: voice.model,
-    languageCode: script.language || 'ar',
-    seed: voice.seed,
-    settings: {stability: voice.stability, similarity_boost: voice.similarity},
+// ---------- TTS in chunks of whole scenes (long requests time out; edits only redo one chunk) ----------
+const MAX_CHUNK = 900;
+const chunks = [];
+{
+  let cur = null;
+  script.scenes.forEach((s) => {
+    const say = s.say.trim();
+    if (cur && cur.text.length + 1 + say.length > MAX_CHUNK) {
+      chunks.push(cur);
+      cur = null;
+    }
+    cur = cur ? {text: `${cur.text} ${say}`} : {text: say};
   });
-  writeFileSync(`${outDir}/voice.mp3`, r.audio);
-  tts = {hash, alignment: r.alignment};
-  writeFileSync(cachePath, JSON.stringify(tts));
-} else {
-  console.log('TTS: cached (text unchanged)');
+  if (cur) chunks.push(cur);
 }
+const chunkDir = `${outDir}/chunks`;
+mkdirSync(chunkDir, {recursive: true});
+const ffmpeg = (args) => execFileSync('ffmpeg', ['-v', 'quiet', '-y', ...args]);
+let usedChars = 0;
+for (const c of chunks) {
+  c.hash = createHash('sha1').update(JSON.stringify({text: c.text, voice})).digest('hex').slice(0, 12);
+  const mp3 = `${chunkDir}/${c.hash}.mp3`;
+  const meta = `${chunkDir}/${c.hash}.json`;
+  if (force || !existsSync(mp3) || !existsSync(meta)) {
+    console.log(`TTS chunk ${c.hash}: ${c.text.length} chars...`);
+    let r;
+    for (let attempt = 1; ; attempt++) {
+      try {
+        r = await ttsWithTimestamps({
+          voiceId: voice.voiceId,
+          text: c.text,
+          modelId: voice.model,
+          languageCode: script.language || 'en',
+          seed: voice.seed,
+          settings: {stability: voice.stability, similarity_boost: voice.similarity},
+        });
+        break;
+      } catch (err) {
+        if (attempt >= 3) throw err;
+        console.warn(`  retry ${attempt}: ${err.message.slice(0, 120)}`);
+        await new Promise((res) => setTimeout(res, 4000 * attempt));
+      }
+    }
+    writeFileSync(mp3, r.audio);
+    writeFileSync(meta, JSON.stringify(r.alignment));
+    usedChars += c.text.length;
+  }
+  ffmpeg(['-i', mp3, '-ar', '44100', '-ac', '1', `${chunkDir}/${c.hash}.wav`]);
+  c.duration = Number(execFileSync('ffprobe', ['-v', 'quiet', '-show_entries', 'format=duration', '-of', 'csv=p=0', `${chunkDir}/${c.hash}.wav`]).toString());
+  c.alignment = JSON.parse(readFileSync(meta, 'utf8'));
+}
+console.log(usedChars ? `TTS: generated ${usedChars} chars in ${chunks.length} chunk(s)` : 'TTS: all chunks cached');
+
+// join chunk audio + alignment (chunks are joined by one space, exactly like fullText)
+writeFileSync(`${chunkDir}/list.txt`, chunks.map((c) => `file '${c.hash}.wav'`).join('\n'));
+ffmpeg(['-f', 'concat', '-safe', '0', '-i', `${chunkDir}/list.txt`, '-c:a', 'libmp3lame', '-b:a', '192k', `${outDir}/voice.mp3`]);
+const tts = {alignment: {characters: [], character_start_times_seconds: [], character_end_times_seconds: []}};
+{
+  let offset = 0;
+  chunks.forEach((c, k) => {
+    const a = tts.alignment;
+    if (k > 0) {
+      a.characters.push(' ');
+      a.character_start_times_seconds.push(offset);
+      a.character_end_times_seconds.push(offset);
+    }
+    c.alignment.characters.forEach((ch, i) => {
+      a.characters.push(ch);
+      a.character_start_times_seconds.push(c.alignment.character_start_times_seconds[i] + offset);
+      a.character_end_times_seconds.push(c.alignment.character_end_times_seconds[i] + offset);
+    });
+    offset += c.duration;
+  });
+}
+execFileSync('sh', ['-c', `rm -f ${chunkDir}/*.wav ${chunkDir}/list.txt`]);
 
 // ---------- 2. map text positions -> alignment positions ----------
 const al = tts.alignment;
@@ -159,6 +211,8 @@ const iconSet = require('@iconify-json/fluent-emoji-flat/icons.json');
 const iconNames = new Set(['bell']);
 scenes.forEach((s) => (s.props || []).forEach((p) => iconNames.add(p.icon)));
 (script.thumbnail?.icons || []).forEach((n) => iconNames.add(n));
+scenes.forEach((s) => (s.props || []).forEach((p) => { if (p.type && p.type !== 'icon') iconNames.delete(p.icon); }));
+iconNames.delete(undefined);
 const icons = {};
 for (const name of iconNames) {
   const data = getIconData(iconSet, name);
@@ -173,15 +227,16 @@ for (const name of iconNames) {
 const episode = {
   id,
   icons,
+  captions: script.captions ?? {landscape: false, vertical: true},
+  shorts: script.shorts ?? [],
   fps: FPS,
-  format: script.format || 'short',
-  theme: script.theme || 'night',
+  theme: script.theme || 'studio',
   title: script.title,
   thumbnail: script.thumbnail,
   youtube: script.youtube,
   durationInFrames: Math.ceil(total * FPS),
   voice: {file: `episodes/${id}/voice.mp3`, offset: LEAD_IN, duration: voiceDuration},
-  music: script.music ?? {file: 'music/leesho-loop.wav', volume: 0.07},
+  music: script.music ?? {file: 'music/lofi-loop.wav', volume: 0.06},
   envelope,
   scenes,
 };
@@ -190,7 +245,7 @@ console.log(`episode.json: ${scenes.length} scenes, ${total.toFixed(1)}s, ${scen
 
 if (qa) {
   const {transcribe, wer} = await import('./lib/stt.mjs');
-  const r = await transcribe(`${outDir}/voice.mp3`);
+  const r = await transcribe(`${outDir}/voice.mp3`, {languageCode: script.language || 'en'});
   const ref = fullText.replace(/\[[^\]]*\]/g, ' ');
   console.log(`QA word error rate: ${(wer(ref, r.text) * 100).toFixed(1)}%`);
   console.log('heard:', r.text);

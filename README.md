@@ -1,73 +1,80 @@
-# ليشو | Leesho 🟠؟
+# Sterling Explains 🪙
 
-قناة يوتيوب كرتونية: كل يوم سؤال «ليش؟» وجوابه العلمي بطريقة ممتعة.
+قناة يوتيوب إنكليزية مرسومة: **Sterling** يشرح الفلوس والبنوك والاقتصاد من خلال قصص تاريخية حقيقية.
 كل شي بالمشروع مسوّى بالكود: الشخصية، الحركة، الصوت، الترجمة، المؤثرات، والموسيقى.
+من سكربت واحد يطلع **فيديو طويل بالعرض (16:9)** و**مقاطع Shorts / Reels عمودية (9:16)** مقطوعة منه.
 
 ## الشخصية
 
-**ليشو** مخلوق صغير برتقالي فضولي. الهوائي اللي فوق راسه على شكل علامة استفهام **؟**
-ولمّا يلگى الجواب، الهوائي يتعدّل ويصير **!** ويضوي. هاي اللقطة تتكرر بكل فيديو، وهي «ماركة» القناة.
+**Sterling**: شاب بنظارات مدوّرة، صدرية خضرة، بابيون ذهبي، وأكمام قميص مطوية.
+عنده عملة ذهبية يقلبها بالهوا لمّا يوصل لأهم نقطة بالقصة، وهاي اللقطة «ماركة» القناة.
 
-- **الشخصية:** فضولي، مرح، يحچي بسرعة ووضوح، ويحب المفاجآت.
-- **اللغة:** فصحى مبسّطة، والكلمة المميزة «ليش؟».
-- **الجمهور:** عام (مراهقين وكبار)، مو محتوى أطفال.
-- **التعابير:** happy, excited, surprised, thinking, sad, wink, determined, laugh, smug, neutral
-- **الحركات:** idle, wave, point, pointLeft, think, cheer, shrug, present, hips, facepalm
+- **أسلوبه:** ذكي، مرح، يحچي بسرعة ووضوح، ويحب القصص الغريبة اللي بيها درس عن الفلوس.
+- **التعابير:** happy, excited, surprised, thinking, sad, worried, wink, determined, laugh, smug, neutral
+- **الحركات:** idle, explain, explainBoth, point, pointLeft, pointUp, present, presentLeft, think, shrug, wave, cheer, facepalm, hips, coin
+- **الصوت:** صوت مصمَّم إله خصيصاً على ElevenLabs (`voices/sterling.json`).
 
 ## كيف ينسوى فيديو جديد
 
 ```bash
-npm install                              # مرة وحدة
-node scripts/voice.mjs 001-onion-tears   # يولّد الصوت + توقيت الكلمات + حركة الفم
-node scripts/render.mjs 001-onion-tears  # يطلّع الفيديو + صورة الغلاف + معلومات يوتيوب
+npm install                             # مرة وحدة
+node scripts/voice.mjs 001-mansa-musa   # الصوت + توقيت كل كلمة + حركة الفم
+node scripts/render.mjs 001-mansa-musa  # الفيديو الطويل + الـShorts + الأغلفة + معلومات يوتيوب
 ```
 
 النتيجة تطلع بـ `out/<id>/`:
-- `<id>.mp4`: الفيديو العمودي 1080×1920 (Short)
-- `thumbnail.png`: صورة الغلاف
-- `youtube.txt`: العنوان والوصف والتاغات، جاهزة للنسخ واللصق
+
+| الملف | شنو هو |
+|------|--------|
+| `<id>.mp4` | الفيديو الطويل 1920×1080 |
+| `short-N-*.mp4` | مقاطع Shorts/Reels عمودية 1080×1920 |
+| `thumbnail.png` | صورة الغلاف للفيديو الطويل (1280×720) |
+| `thumbnail-vertical.png` | غلاف عمودي للـShorts |
+| `youtube.txt` | العنوان + الوصف (ويّا الفصول/Chapters) + التاغات |
+| `short-N-*.txt` | عنوان ووصف كل Short |
+| `captions.srt` | ترجمة إنكليزية ترفعها على يوتيوب |
 
 ### ملف السكربت `videos/<id>/script.json`
 
-كل مشهد = جملة يحچيها ليشو + شنو يسوي بنفس الوقت:
+كل مشهد = جملة يحچيها Sterling + شنو يصير على الشاشة:
 
 ```json
 {
-  "say": "[excited] فيصرخ دماغك: خطر! فتنزل الدموع.",
-  "expression": "surprised", "pose": "shrug", "layout": "center",
-  "bigText": "خطر!", "bigTextWord": 2,
-  "props": [{"icon": "brain"}, {"icon": "droplet", "word": 5, "anim": "drop"}],
-  "beats": [{"word": 5, "antenna": "idea", "expression": "excited", "pose": "cheer", "hop": true}]
+  "chapter": "Why it went wrong",
+  "say": "Prices went up. Economists have a name for this: inflation.",
+  "layout": "left", "theme": "studio",
+  "expression": "determined", "pose": "present", "look": {"x": 0.7, "y": 0},
+  "bigText": "Inflation", "bigTextWord": 9,
+  "props": [
+    {"type": "chart", "points": [2, 3, 5, 8], "label": "Prices"},
+    {"icon": "coin", "word": 3, "anim": "drop"}
+  ],
+  "beats": [{"word": 5, "coin": true, "expression": "excited"}]
 }
 ```
 
 - `word`: رقم الكلمة بالجملة (يبدي من 0)، حتى الشي يطلع بالضبط وقت ما تنقال الكلمة.
-- `layout`: موقع ليشو: `center`, `left`, `right`, `closeup`, `small`
-- `theme`: الخلفية: `night`, `ocean`, `sky`, `sunset`, `forest`, `space`, `candy`, `lab`
-- `props`: رسومات من مكتبة Fluent Emoji (أكثر من 3000 رسمة، رخصة MIT). للبحث: `node scripts/find-icon.mjs octopus heart`
-- علامات صوتية مثل `[excited]` و`[laughs]` و`[curious]` تغيّر نبرة الصوت (موديل eleven_v3).
+- `layout`: `left` (المقدم يسار والرسومات يمين)، `right`، `center`، `closeup` (لقطة قريبة)، `small`، `full`
+- `theme`: الخلفية: `studio`، `vault`، `parchment` (تاريخ)، `desert`، `crimson` (أزمة)، `chart`، `sky`، `night`
+- `props`: `icon` (أكثر من 3000 رسمة Fluent Emoji، رخصة MIT)، `stat` (رقم كبير)، `year` (سنة)، `chart` (رسم بياني يتحرك).
+  للبحث عن رسمة: `node scripts/find-icon.mjs bank gold`
+- `shorts`: أي مشاهد تنقطع وتصير Short، ويّا جملة الافتتاح (`hook`).
+- علامات صوتية مثل `[whispers]` و`[laughs]` تغيّر نبرة الصوت.
 
-## الصوت
+بالفيديو العمودي التصميم يتغيّر تلقائياً: المقدم ينزل جوّا، الرسومات تصعد فوگ، والإشارة للجانب تصير إشارة لفوگ.
 
-- **المزوّد:** ElevenLabs، موديل `eleven_v3`، بصوت مصمَّم خصيصاً لليشو (`voices/leesho.json`).
-- الصوت ينولّد بطلب واحد لكل فيديو، ويرجع وياه توقيت كل حرف، فالترجمة تطلع مضبوطة على الكلام.
-- `--qa` يحوّل الصوت لنص حتى نتأكد إن الكلمات انگالت صح. يصرف رصيد، فنستخدمه بس وقت الحاجة.
-- الفيديو الواحد (40-50 ثانية) يصرف تقريباً 550 حرف من رصيد ElevenLabs.
-- بدائل الصوتيات الأخرى بالمشروع (تصميم الصوت): `voices/previews/`
+## الصوت والرصيد
+
+- كل 900 حرف تقريباً ينولّد بطلب منفصل وينحفظ. إذا عدّلت مشهد، بس قطعته تنعاد، والباقي ما يصرف رصيد.
+- الدقيقة الوحدة من الفيديو تصرف تقريباً 1000 حرف من ElevenLabs.
+- `--qa` يحوّل الصوت لنص حتى نتأكد إن الكلمات انگالت صح. يصرف رصيد إضافي.
 
 ## الموسيقى والمؤثرات
 
-متولّدة بالكود (`scripts/make-sfx.mjs`)، فما عليها أي مشكلة حقوق.
-
-## رفع الفيديو على يوتيوب
-
-1. افتح تطبيق YouTube ← **+** ← رفع فيديو ← اختار `<id>.mp4`.
-2. انسخ العنوان والوصف من `youtube.txt`.
-3. الجمهور: «لا، ليس مخصصاً للأطفال»، لأن المحتوى علمي عام.
-4. نشر.
+متولّدة بالكود (`scripts/make-sfx.mjs`): لوب lo-fi، رنّة العملة، pop، whoosh. فما عليها أي حقوق.
 
 ## الترخيص
 
 - Remotion مجاني للأفراد والشركات الصغيرة (3 موظفين أو أقل).
 - Fluent Emoji: رخصة MIT من Microsoft.
-- الخطوط Baloo Bhaijaan 2 وLalezar: رخصة OFL مفتوحة.
+- الخطوط Montserrat وLalezar: رخصة OFL مفتوحة.

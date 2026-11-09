@@ -1,0 +1,182 @@
+{
+  "id": "001-mansa-musa",
+  "language": "en",
+  "theme": "studio",
+  "title": "The King Who Was So Rich He Crashed an Economy",
+  "voice": {"name": "sterling", "model": "eleven_v3", "stability": 0.5, "seed": 21},
+  "captions": {"landscape": false, "vertical": true},
+  "scenes": [
+    {
+      "chapter": "The richest man ever?",
+      "say": "In 1324, one man walked into Cairo with so much gold... that he accidentally crashed the economy.",
+      "layout": "left", "theme": "desert", "expression": "excited", "pose": "present", "look": {"x": 0.7, "y": 0},
+      "props": [{"type": "year", "value": "1324", "word": 1}, {"type": "chart", "points": [10, 9.7, 8.4, 6.6, 5.6, 5.2], "label": "Value of gold", "word": 14}],
+      "beats": [{"word": 10, "coin": true, "pose": "coin"}, {"word": 14, "expression": "surprised", "pose": "shrug"}]
+    },
+    {
+      "say": "His name was Mansa Musa... and he may have been the richest person who ever lived.",
+      "expression": "smug", "pose": "explain", "look": {"x": 0.6, "y": 0},
+      "bigText": "Mansa Musa", "bigTextWord": 3,
+      "props": [{"icon": "crown", "word": 3}, {"icon": "money-bag", "word": 11}]
+    },
+    {
+      "say": "Hi, I'm Sterling, and today we're finding out how being too rich can actually break an economy.",
+      "layout": "center", "theme": "studio", "expression": "happy", "pose": "wave", "hop": true, "look": {"x": 0, "y": 0},
+      "props": [{"icon": "money-bag", "word": 11}, {"icon": "chart-decreasing", "word": 14}],
+      "beats": [{"word": 4, "pose": "explainBoth", "expression": "excited"}]
+    },
+    {
+      "chapter": "The Mali Empire",
+      "say": "Let's go back seven hundred years, to West Africa.",
+      "layout": "left", "theme": "parchment", "expression": "happy", "pose": "present", "look": {"x": 0.7, "y": -0.1},
+      "bigText": "700 years ago", "bigTextWord": 3,
+      "props": [{"icon": "globe-showing-europe-africa", "word": 7, "anim": "spin"}]
+    },
+    {
+      "say": "Mansa Musa ruled the Mali Empire, which stretched from the Atlantic coast far into the interior of West Africa.",
+      "expression": "neutral", "pose": "explain",
+      "props": [{"icon": "classical-building", "word": 4, "label": "Mali Empire"}, {"icon": "world-map", "word": 10}]
+    },
+    {
+      "say": "And Mali had something the whole world wanted... gold. Lots and lots of gold.",
+      "theme": "vault", "expression": "smug", "pose": "explain",
+      "bigText": "Gold", "bigTextWord": 8,
+      "props": [{"icon": "coin", "word": 8, "anim": "drop"}, {"icon": "money-bag", "word": 11, "anim": "drop"}],
+      "beats": [{"word": 8, "coin": true, "pose": "coin", "expression": "excited"}]
+    },
+    {
+      "say": "Its mines were among the richest in the world, and Mali's gold flowed across the Sahara to North Africa, Europe and the Middle East.",
+      "layout": "right", "expression": "neutral", "pose": "presentLeft", "look": {"x": -0.7, "y": 0},
+      "props": [{"icon": "pick", "word": 1}, {"icon": "two-hump-camel", "word": 15, "anim": "slide"}, {"icon": "world-map", "word": 17}]
+    },
+    {
+      "chapter": "The legendary journey",
+      "say": "So in 1324, when Mansa Musa set off on the pilgrimage to Mecca... he did not exactly pack light.",
+      "layout": "left", "theme": "desert", "expression": "happy", "pose": "present", "look": {"x": 0.7, "y": 0},
+      "props": [{"type": "year", "value": "1324", "word": 2}, {"icon": "kaaba", "word": 12}],
+      "beats": [{"word": 13, "expression": "smug", "pose": "hips", "look": {"x": 0, "y": 0}}]
+    },
+    {
+      "say": "Chroniclers described an enormous caravan, by some accounts tens of thousands of people, and camels loaded with gold.",
+      "expression": "surprised", "pose": "explain", "look": {"x": 0.6, "y": 0},
+      "props": [{"icon": "camel", "word": 4, "anim": "slide"}, {"type": "stat", "value": "60,000?", "label": "people (some accounts)", "word": 8}, {"icon": "two-hump-camel", "word": 14, "anim": "slide"}]
+    },
+    {
+      "say": "When he reached Cairo, Mansa Musa did what any extremely generous billionaire would do.",
+      "layout": "closeup", "expression": "smug", "pose": "hips", "look": {"x": -0.5, "y": 0},
+      "props": [{"icon": "mosque", "word": 3, "label": "Cairo"}]
+    },
+    {
+      "say": "He spent gold. He gave gold away. To officials, to the poor, to pretty much everyone he met.",
+      "layout": "left", "theme": "vault", "expression": "excited", "pose": "explain", "look": {"x": 0.6, "y": 0},
+      "props": [{"icon": "coin", "word": 2, "anim": "drop"}, {"icon": "money-with-wings", "word": 5}, {"icon": "money-bag", "word": 8, "anim": "drop"}],
+      "beats": [{"word": 2, "coin": true, "pose": "coin"}, {"word": 12, "pose": "explainBoth", "expression": "laugh"}]
+    },
+    {
+      "chapter": "Why it went wrong",
+      "say": "[whispers] And that's when things started to go wrong.",
+      "layout": "center", "theme": "crimson", "expression": "worried", "pose": "shrug", "look": {"x": 0, "y": 0}, "zoom": 1.08,
+      "bigText": "Uh-oh.", "bigTextWord": 6
+    },
+    {
+      "say": "Suddenly, Cairo was flooded with gold.",
+      "layout": "left", "expression": "surprised", "pose": "present", "look": {"x": 0.7, "y": -0.3},
+      "props": [{"icon": "coin", "word": 3, "anim": "drop"}, {"icon": "coin", "word": 4, "anim": "drop"}, {"icon": "money-bag", "word": 5, "anim": "drop"}]
+    },
+    {
+      "say": "And here's the rule that runs every economy on Earth: when something becomes common, it becomes less valuable.",
+      "layout": "center", "theme": "studio", "expression": "determined", "pose": "explainBoth", "look": {"x": 0, "y": 0},
+      "bigText": "Common = cheap", "bigTextWord": 13,
+      "props": [{"icon": "balance-scale", "word": 3}],
+      "beats": [{"word": 10, "coin": true, "pose": "coin", "expression": "excited"}]
+    },
+    {
+      "say": "If everyone has gold, gold stops being special. So merchants started asking for more of it, for the exact same things.",
+      "layout": "left", "expression": "neutral", "pose": "explain", "look": {"x": 0.6, "y": 0},
+      "props": [{"icon": "coin", "word": 3}, {"icon": "bread", "word": 9}, {"icon": "chart-increasing", "word": 13, "label": "Prices"}]
+    },
+    {
+      "say": "Prices went up. Each piece of gold bought less. Economists have a name for this: inflation.",
+      "expression": "determined", "pose": "present", "look": {"x": 0.7, "y": 0},
+      "bigText": "Inflation", "bigTextWord": 15,
+      "props": [{"type": "chart", "points": [2, 2.4, 3.4, 5, 6.6, 8], "label": "Prices", "word": 0}, {"type": "chart", "points": [8, 7.2, 5.6, 4.2, 3.3, 3], "label": "Gold's value", "word": 3}]
+    },
+    {
+      "chapter": "The aftermath",
+      "say": "And it didn't bounce back quickly. The historian al-Umari, writing about twelve years later, reported that gold in Cairo still hadn't recovered its value.",
+      "layout": "right", "theme": "parchment", "expression": "neutral", "pose": "presentLeft", "look": {"x": -0.7, "y": 0},
+      "props": [{"icon": "scroll", "word": 7}, {"type": "stat", "value": "12 years", "label": "later: still low", "word": 11}, {"icon": "hourglass-not-done", "word": 19}]
+    },
+    {
+      "say": "[laughs] One man's shopping trip shook the gold market of an entire region.",
+      "layout": "left", "expression": "laugh", "pose": "shrug", "look": {"x": 0.3, "y": 0},
+      "props": [{"icon": "shopping-cart", "word": 2}, {"icon": "globe-showing-europe-africa", "word": 9}]
+    },
+    {
+      "chapter": "Gold on the map",
+      "say": "His fame spread all the way to Europe. On a famous map from 1375, the Catalan Atlas, Mansa Musa is drawn on a throne, holding a golden nugget.",
+      "expression": "happy", "pose": "present", "look": {"x": 0.7, "y": 0},
+      "props": [{"icon": "world-map", "word": 11}, {"type": "year", "value": "1375", "word": 13}, {"icon": "crown", "word": 23}],
+      "beats": [{"word": 26, "coin": true, "pose": "coin", "expression": "excited"}]
+    },
+    {
+      "say": "But Mansa Musa wasn't just a big spender. Back home, he built mosques, and helped make Timbuktu a famous center of learning.",
+      "layout": "right", "theme": "desert", "expression": "neutral", "pose": "presentLeft", "look": {"x": -0.7, "y": 0},
+      "props": [{"icon": "mosque", "word": 11}, {"icon": "books", "word": 16, "label": "Timbuktu"}]
+    },
+    {
+      "chapter": "The lesson",
+      "say": "So what's the lesson here? Money is only valuable because it's scarce.",
+      "layout": "center", "theme": "studio", "expression": "thinking", "pose": "think", "look": {"x": 0, "y": -0.4},
+      "bigText": "Scarcity", "bigTextWord": 11,
+      "props": [{"icon": "gem-stone", "word": 8}],
+      "beats": [{"word": 5, "coin": true, "pose": "coin", "expression": "determined", "look": {"x": 0, "y": 0}}]
+    },
+    {
+      "say": "Flood the market with gold, or print too much money, and every coin buys a little less.",
+      "layout": "left", "expression": "neutral", "pose": "explain", "look": {"x": 0.6, "y": 0},
+      "props": [{"icon": "printer", "word": 6}, {"icon": "dollar-banknote", "word": 9}, {"type": "chart", "points": [9, 8.2, 6.4, 4.8, 3.7, 3.2], "label": "Buying power", "word": 11}]
+    },
+    {
+      "say": "That's exactly what happened in Germany in 1923, and in Zimbabwe in 2008. But those are stories for another video.",
+      "theme": "crimson", "expression": "worried", "pose": "present", "look": {"x": 0.7, "y": 0},
+      "props": [{"type": "year", "value": "1923", "word": 7}, {"type": "year", "value": "2008", "word": 12}],
+      "beats": [{"word": 13, "expression": "wink", "pose": "explain"}]
+    },
+    {
+      "say": "If you want to know how money really works, subscribe. And tell me in the comments: what money mystery should I solve next?",
+      "layout": "left", "theme": "studio", "expression": "happy", "pose": "explain", "subscribe": true, "look": {"x": 0.5, "y": 0},
+      "beats": [{"word": 9, "pose": "point"}, {"word": 16, "expression": "thinking", "pose": "think", "look": {"x": 0.3, "y": -0.5}}, {"word": 22, "expression": "wink", "pose": "wave", "look": {"x": 0, "y": 0}}]
+    }
+  ],
+  "shorts": [
+    {
+      "id": "crashed-economy",
+      "hook": "This king crashed an economy",
+      "scenes": [0, 1, 10, 12, 13, 15, 16],
+      "youtube": {
+        "title": "This King Was So Rich He Crashed an Economy 😳 #shorts",
+        "description": "In 1324, Mansa Musa brought so much gold to Cairo that gold lost its value for years. Full story on the channel!\n#shorts #history #money #economics #mansamusa",
+        "tags": ["mansa musa", "history", "economics", "inflation", "money", "shorts"]
+      }
+    },
+    {
+      "id": "why-money-loses-value",
+      "hook": "Why your money loses value",
+      "scenes": [13, 14, 15, 20, 21, 22],
+      "youtube": {
+        "title": "Why Money Loses Value (Explained in 40 Seconds) #shorts",
+        "description": "Money is only valuable because it's scarce. Flood the market and every coin buys less: that's inflation.\n#shorts #money #inflation #economics #finance",
+        "tags": ["inflation", "money explained", "economics", "finance", "shorts"]
+      }
+    }
+  ],
+  "thumbnail": {"text": "He broke\nan economy", "expression": "surprised", "pose": "shrug", "icons": ["crown", "coin", "chart-decreasing"], "theme": "desert"},
+  "youtube": {
+    "title": "The King Who Was So Rich He Crashed an Economy",
+    "description": "In 1324, Mansa Musa, ruler of the Mali Empire, traveled to Mecca and stopped in Cairo, where he spent and gave away so much gold that its value collapsed for years.\nIn this video, Sterling explains what happened, why it happened, and the simple economic rule behind it: inflation.",
+    "footer": "Sources: Ibn Fadlallah al-Umari, Masalik al-Absar (14th c.); the Catalan Atlas (1375).\nThis video is for education and entertainment, not financial advice.\n\n#history #economics #money #mansamusa #inflation",
+    "tags": ["mansa musa", "richest man in history", "mali empire", "inflation explained", "history of money", "economics explained", "how inflation works", "gold", "african history", "sterling explains"],
+    "category": "Education"
+  }
+}

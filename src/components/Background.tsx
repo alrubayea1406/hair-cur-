@@ -1,49 +1,91 @@
 import React from 'react';
-import {AbsoluteFill, random, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, random, useVideoConfig} from 'remotion';
 import {FONT_DISPLAY} from '../lib/fonts';
 
-export const THEMES = {
-  night: ['#1C2C7A', '#4B1F8F', '#7A2E9E'],
-  ocean: ['#0B4F8A', '#0E7CA6', '#13B5B1'],
-  sky: ['#2563EB', '#3B82F6', '#7DD3FC'],
-  sunset: ['#7C1D6F', '#C2366B', '#F2845C'],
-  forest: ['#14532D', '#15803D', '#65A30D'],
-  space: ['#05061A', '#1B1250', '#3A1C71'],
-  candy: ['#5B2A86', '#9D4EDD', '#F15BB5'],
-  lab: ['#0F3D3E', '#116466', '#2C9C8F'],
-} as const;
+type Motif = 'money' | 'map' | 'grid' | 'stars';
+
+export const THEMES: Record<string, {colors: [string, string, string]; motif: Motif; ink: string}> = {
+  studio: {colors: ['#0B1530', '#173061', '#2C5AA0'], motif: 'money', ink: '#ffffff'},
+  vault: {colors: ['#071F17', '#0F3E2C', '#1E6B4A'], motif: 'money', ink: '#F6C445'},
+  parchment: {colors: ['#B98B4E', '#D9BC86', '#F1E2BF'], motif: 'map', ink: '#5A3B1A'},
+  desert: {colors: ['#8A3B1C', '#D9772F', '#F7C46C'], motif: 'map', ink: '#FFF3D6'},
+  crimson: {colors: ['#22070D', '#4F0F1C', '#8E1D2C'], motif: 'grid', ink: '#ffffff'},
+  chart: {colors: ['#08131F', '#10263C', '#1B3D5C'], motif: 'grid', ink: '#7FD1FF'},
+  sky: {colors: ['#1D4ED8', '#3B82F6', '#93C5FD'], motif: 'money', ink: '#ffffff'},
+  night: {colors: ['#140F3A', '#2E1F6B', '#5B3AA0'], motif: 'stars', ink: '#ffffff'},
+};
 
 export type ThemeName = keyof typeof THEMES;
 
-// Animated brand background: soft gradient + slowly drifting "؟" marks and dots.
-export const Background: React.FC<{theme?: ThemeName; seed?: string; density?: number}> = ({
-  theme = 'night',
+// Animated background: gradient + slowly drifting motif (money signs, map lines, chart grid, stars).
+export const Background: React.FC<{theme?: ThemeName; seed?: string; density?: number; t?: number}> = ({
+  theme = 'studio',
   seed = 'bg',
-  density = 14,
+  density = 16,
+  t = 0,
 }) => {
-  const frame = useCurrentFrame();
-  const {width, height, fps} = useVideoConfig();
-  const [c1, c2, c3] = THEMES[theme];
-  const t = frame / fps;
+  const {width, height} = useVideoConfig();
+  const th = THEMES[theme] ?? THEMES.studio;
+  const [c1, c2, c3] = th.colors;
   const items = Array.from({length: density}).map((_, i) => {
     const r = (k: string) => random(`${seed}-${i}-${k}`);
-    const size = 60 + r('s') * 170;
-    const speed = 18 + r('v') * 30;
-    const y = ((r('y') * (height + 400) - t * speed) % (height + 400) + height + 400) % (height + 400) - 200;
-    const x = r('x') * width + Math.sin(t * 0.6 + i) * 30;
-    const rot = (r('r') - 0.5) * 50 + Math.sin(t * 0.8 + i) * 10;
-    const isMark = r('k') > 0.35;
-    return {size, x, y, rot, isMark, op: 0.06 + r('o') * 0.08};
+    const size = 50 + r('s') * 150;
+    const speed = 12 + r('v') * 22;
+    const span = height + 400;
+    const y = ((((r('y') * span - t * speed) % span) + span) % span) - 200;
+    const x = r('x') * width + Math.sin(t * 0.5 + i) * 25;
+    return {size, x, y, rot: (r('r') - 0.5) * 40 + Math.sin(t * 0.7 + i) * 8, kind: r('k'), op: 0.05 + r('o') * 0.07};
   });
   return (
-    <AbsoluteFill
-      style={{
-        background: `radial-gradient(120% 90% at 50% 20%, ${c3} 0%, ${c2} 45%, ${c1} 100%)`,
-        overflow: 'hidden',
-      }}
-    >
-      {items.map((it, i) =>
-        it.isMark ? (
+    <AbsoluteFill style={{background: `radial-gradient(120% 95% at 50% 25%, ${c3} 0%, ${c2} 48%, ${c1} 100%)`, overflow: 'hidden'}}>
+      {th.motif === 'grid' ? (
+        <AbsoluteFill
+          style={{
+            opacity: 0.12,
+            backgroundImage: `linear-gradient(${th.ink} 2px, transparent 2px), linear-gradient(90deg, ${th.ink} 2px, transparent 2px)`,
+            backgroundSize: '90px 90px',
+            backgroundPosition: `${(t * 12) % 90}px ${(t * 6) % 90}px`,
+          }}
+        />
+      ) : null}
+      {th.motif === 'map'
+        ? Array.from({length: 6}).map((_, i) => (
+            <div
+              key={i}
+              style={{
+                position: 'absolute',
+                left: -200,
+                right: -200,
+                top: (i + 0.5) * (height / 6),
+                height: 0,
+                borderTop: `3px dashed ${th.ink}`,
+                opacity: 0.1,
+                transform: `rotate(${(random(`${seed}-m${i}`) - 0.5) * 8}deg) translateX(${Math.sin(t * 0.3 + i) * 30}px)`,
+              }}
+            />
+          ))
+        : null}
+      {items.map((it, i) => {
+        if (th.motif === 'grid') return null;
+        if (th.motif === 'stars' || th.motif === 'map') {
+          return (
+            <div
+              key={i}
+              style={{
+                position: 'absolute',
+                left: it.x,
+                top: it.y,
+                width: it.size * 0.12,
+                height: it.size * 0.12,
+                borderRadius: '50%',
+                background: th.ink,
+                opacity: it.op * 1.6,
+                transform: 'translate(-50%, -50%)',
+              }}
+            />
+          );
+        }
+        return it.kind > 0.45 ? (
           <div
             key={i}
             style={{
@@ -52,13 +94,13 @@ export const Background: React.FC<{theme?: ThemeName; seed?: string; density?: n
               top: it.y,
               fontFamily: FONT_DISPLAY,
               fontSize: it.size,
-              color: '#fff',
+              color: th.ink,
               opacity: it.op,
               transform: `translate(-50%, -50%) rotate(${it.rot}deg)`,
               lineHeight: 1,
             }}
           >
-            ؟
+            $
           </div>
         ) : (
           <div
@@ -67,17 +109,17 @@ export const Background: React.FC<{theme?: ThemeName; seed?: string; density?: n
               position: 'absolute',
               left: it.x,
               top: it.y,
-              width: it.size * 0.35,
-              height: it.size * 0.35,
+              width: it.size * 0.5,
+              height: it.size * 0.5,
               borderRadius: '50%',
-              background: '#fff',
+              border: `${Math.max(3, it.size * 0.06)}px solid ${th.ink}`,
               opacity: it.op,
               transform: 'translate(-50%, -50%)',
             }}
           />
-        ),
-      )}
-      <AbsoluteFill style={{background: 'radial-gradient(80% 60% at 50% 50%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.28) 100%)'}} />
+        );
+      })}
+      <AbsoluteFill style={{background: 'radial-gradient(85% 70% at 50% 45%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.32) 100%)'}} />
     </AbsoluteFill>
   );
 };
