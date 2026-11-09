@@ -1,0 +1,27 @@
+{
+  "description": "A cheerful, curious little cartoon creature with a bright, playful, slightly high-pitched young male voice. Native Arabic speaker with clear, warm Modern Standard Arabic pronunciation. Energetic and expressive like a fun YouTube science-explainer host, smiling while he talks, lively pace but always clear. Clean studio recording, no background noise.",
+  "text": "مرحباً! أنا ليشو، وهذا الهوائيّ فوق رأسي علامةُ استفهام. كلَّ يوم أسألُ سؤالاً غريباً: ليش السماء زرقاء؟ ليش نتثاءب؟ ثم أبحثُ عن الجواب معكم... ولمّا ألقاه، يصيرُ الهوائيُّ علامةَ تعجّب! يلّا بنا!",
+  "previews": [
+    {
+      "n": 1,
+      "file": "voices/previews/leesho-voice-1.mp3",
+      "generated_voice_id": "NCXhZ7jtPZOiYNtv5fNJ",
+      "duration_secs": 18.68025,
+      "language": "ar"
+    },
+    {
+      "n": 2,
+      "file": "voices/previews/leesho-voice-2.mp3",
+      "generated_voice_id": "cmTsdAtMjpZ6BMoN2Xdr",
+      "duration_secs": 19.6468125,
+      "language": "ar"
+    },
+    {
+      "n": 3,
+      "file": "voices/previews/leesho-voice-3.mp3",
+      "generated_voice_id": "DhYhC3dfyNMPjElyF4g5",
+      "duration_secs": 19.4900625,
+      "language": "ar"
+    }
+  ]
+}
